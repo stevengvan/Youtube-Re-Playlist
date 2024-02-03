@@ -1,0 +1,43 @@
+#playlists-list {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.playlist-container {
+  color: black;
+  padding: 0.5rem;
+  height: auto;
+  width: 100%;
+  display: flex;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+}
+.playlist-container:hover {
+  background-color: grey;
+  transition-duration: 250ms;
+  cursor: pointer;
+}
+.playlist-container:focus {
+  background-color: grey;
+}
+.playlist-container:not(:last-of-type) {
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid grey;
+}
+.playlist-container > img {
+  width: 120px;
+  height: 90px;
+  margin-right: 0.5rem;
+}
+.playlist-container > p {
+  font-size: 20px;
+}
+
+@media (min-width: 40rem) and (min-width: 750px) {
+  #playlists-list {
+    width: 50%;
+  }
+}

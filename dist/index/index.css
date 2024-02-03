@@ -1,0 +1,35 @@
+#menu-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#menu-buttons {
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+  place-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+#app-title {
+  font-size: 50px;
+}
+
+#error-message {
+  word-wrap: break-word;
+  margin-bottom: 0.5rem;
+  font-size: 17.5px;
+}
+
+#search-bar {
+  font-size: 20px;
+  margin-bottom: 0.5rem;
+}
+
+#submit-btn {
+  padding: 0.5rem;
+}
