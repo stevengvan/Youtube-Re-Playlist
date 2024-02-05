@@ -139,7 +139,7 @@ const searchPlaylist = async (event, submit = false, id = "", title = "") => {
         }
         localStorage.setItem("videosList", JSON.stringify(videosList));
         localStorage.setItem("total", total);
-        window.location.href = "player/player.html";
+        window.location.href = "/player/player.html";
       } else if (statusCode == 404) {
         document.getElementById("error-message").innerHTML =
           "Could not find playlist with the given URL/ID: Check if the playlist URL or ID is incorrect or if the playlist is private";
