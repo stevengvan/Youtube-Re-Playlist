@@ -24,7 +24,7 @@ const fetchPlaylists = async () => {
     }, {});
 
   const response = await fetch(
-    `/.netlify/functions/fetchPlaylists?access_token=${queryStrings["access_token"]}`
+    `../../.netlify/functions/fetchPlaylists?access_token=${queryStrings["access_token"]}`
   );
   const data = await response.json();
   playlists = [...data.playlists];

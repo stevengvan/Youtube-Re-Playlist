@@ -84,7 +84,7 @@ var newPlaylist = "";
 // Retrieves all videos in playlist
 const fetchVideos = async () => {
   const response = await fetch(
-    `/.netlify/functions/fetchVideos?id=${newPlaylist}`
+    `../.netlify/functions/fetchVideos?id=${newPlaylist}`
   );
   const data = await response.json();
 
