@@ -1,5 +1,69 @@
-function signOut() {
-  document.getElementById("sign-out").blur();
+/*
+ * Create form to request access token from Google's OAuth 2.0 server.
+ */
+function oauthSignIn(path) {
+  // Google's OAuth 2.0 endpoint for requesting an access token
+  var oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
+
+  // Create <form> element to submit parameters to OAuth 2.0 endpoint.
+  var form = document.createElement("form");
+  form.setAttribute("method", "GET"); // Send as a GET request.
+  form.setAttribute("action", oauth2Endpoint);
+
+  // Parameters to pass to OAuth 2.0 endpoint.
+  var params = {
+    client_id:
+      "445368748159-a5duqn5mbv6m4mm6acpop8tu9f2kd9bi.apps.googleusercontent.com", // Make sure to restrict authorization via adding Javascript origins and redirect URIs
+    redirect_uri: "https://yt-re-playlist.netlify.app/" + path,
+    response_type: "token",
+    scope: "https://www.googleapis.com/auth/youtube.readonly",
+    include_granted_scopes: "true",
+    state: "pass-through value",
+  };
+
+  // Add form parameters as hidden input values.
+  for (var p in params) {
+    var input = document.createElement("input");
+    input.setAttribute("type", "hidden");
+    input.setAttribute("name", p);
+    input.setAttribute("value", params[p]);
+    form.appendChild(input);
+  }
+
+  // Add form to page and submit it to open the OAuth 2.0 endpoint.
+  document.body.appendChild(form);
+  form.submit();
+}
+
+function createSignInOutBtn() {
+  var queryStrings = window.location.hash
+    .substring(1)
+    .split("&")
+    .reduce(function (obj, str, index) {
+      let parts = str.split("=");
+      if (parts[0] && parts[1]) {
+        obj[parts[0].replace(/\s+/g, "")] = parts[1].trim();
+      }
+      return obj;
+    }, {});
+
+  if (queryStrings["access_token"]) {
+    localStorage.setItem("accessToken", queryStrings["access_token"]);
+  }
+
+  var access_token = localStorage.getItem("accessToken");
+  var signInOutBtn = document.getElementById("sign-in-out");
+  if (access_token !== null && access_token.length > 0) {
+    signInOutBtn.textContent = "Sign Out";
+    signInOutBtn.ariaLabel = "sign out of account";
+    signInOutBtn.onclick = function () {
+      signOut(window.location.pathname);
+    };
+  }
+}
+
+function signOut(redirect) {
+  document.getElementById("sign-in-out").blur();
   // Google's OAuth 2.0 endpoint for revoking access tokens.
   var revokeTokenEndpoint = "https://oauth2.googleapis.com/revoke";
 
@@ -21,7 +85,8 @@ function signOut() {
   document.body.appendChild(form);
   form.submit();
   localStorage.setItem("accessToken", "");
-  location.href = "index/index.html";
+
+  location.href = redirect;
 }
 
 function toggleDarkMode() {
@@ -68,14 +133,21 @@ function toggleLoading(toggle) {
   }
 }
 
-// Goes back to options to either select playlist or search a playlist
+// Goes back to home page
 function gotoMenu() {
-  const currentURL = window.location.href;
-  document.getElementById("go-back").blur();
-  if (currentURL.includes("selectplaylist") || document.referrer.length === 0) {
-    location.href = "index/index.html";
+  location.href = "index/index.html";
+}
+
+function goBack() {
+  var access_token = localStorage.getItem("accessToken");
+  if (access_token && access_token.length > 0) {
+    if (window.location.href.includes("selectplaylist")) {
+      location.href = "index/index.html";
+    } else {
+      history.back();
+    }
   } else {
-    history.back();
+    location.href = "index/index.html";
   }
 }
 

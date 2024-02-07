@@ -1,18 +1,7 @@
 var playlists = [];
-var queryStrings = window.location.hash
-  .substring(1)
-  .split("&")
-  .reduce(function (obj, str, index) {
-    let parts = str.split("=");
-    if (parts[0] && parts[1]) {
-      obj[parts[0].replace(/\s+/g, "")] = parts[1].trim();
-    }
-    return obj;
-  }, {});
-localStorage.setItem("accessToken", queryStrings["access_token"]);
-
-const fetchPlaylists = async () => {
-  queryStrings = window.location.hash
+var access_token = localStorage.getItem("accessToken");
+if (access_token.length == 0) {
+  var queryStrings = window.location.hash
     .substring(1)
     .split("&")
     .reduce(function (obj, str, index) {
@@ -22,9 +11,13 @@ const fetchPlaylists = async () => {
       }
       return obj;
     }, {});
+  access_token = queryStrings["access_token"];
+  localStorage.setItem("accessToken", access_token);
+}
 
+const fetchPlaylists = async () => {
   const response = await fetch(
-    `../../.netlify/functions/fetchPlaylists?access_token=${queryStrings["access_token"]}`
+    `../../.netlify/functions/fetchPlaylists?access_token=${access_token}`
   );
   const data = await response.json();
   playlists = [...data.playlists];

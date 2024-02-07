@@ -15,21 +15,6 @@ function isMobile() {
 
 displayList();
 
-if (
-  localStorage.getItem("accessToken") !== null &&
-  localStorage.getItem("accessToken").length > 0
-) {
-  var signOutBtn = document.createElement("button");
-  signOutBtn.textContent = "Sign Out";
-  signOutBtn.id = "sign-out";
-  signOutBtn.tabIndex = 0;
-  signOutBtn.alt = "sign out of account";
-  signOutBtn.onclick = function () {
-    signOut();
-  };
-  document.getElementById("header-right").append(signOutBtn);
-}
-
 // Create Youtube player
 var player;
 function onYouTubeIframeAPIReady() {

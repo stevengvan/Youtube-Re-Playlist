@@ -82,11 +82,14 @@
         media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
 </head>
 
-<body>
+<body onload="createSignInOutBtn()">
     <header>
         <div id="header-right">
             <button id="toggle-dark" tabindex="0" alt="toggle dark mode" onclick="toggleDarkMode()"><img id="icon"
                     alt="dark mode icon" src="../icons/dark-theme-svgrepo-com.svg"></button>
+
+            <button id="sign-in-out" tabindex="0" aria-label="sign into an account"
+                onclick="oauthSignIn('index/index.html')">Sign In</button>
         </div>
     </header>
 
@@ -94,7 +97,7 @@
         <h1 id="app-title">Youtube Playlist Player</h1>
 
         <div id="menu-buttons">
-            <button onclick="oauthSignIn()">Select playlist from your account</button>
+            <button onclick="selectPlaylistRedirect()">Select playlist from your account</button>
             <h2>Or</h2>
             <p id="error-message"></p>
             <label>
@@ -106,6 +109,7 @@
         </div>
     </div>
 </body>
+
 
 <script>
     if (localStorage.getItem("isDarkMode") == "true") {

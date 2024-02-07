@@ -84,11 +84,15 @@
 
 <body>
     <header>
-        <button id="go-back" aria-label="go back button" onclick="gotoMenu()"><span>&#8592;</span></button>
+        <button id="go-back" aria-label="go back button" onclick="goBack()"><span>&#8592;</span></button>
+
         <div id="header-right">
             <button id="toggle-dark" tabindex="0" alt="toggle dark mode" onclick="toggleDarkMode()"><img id="icon"
                     alt="dark mode icon" src="../icons/dark-theme-svgrepo-com.svg"></button>
-            <button id="sign-out" tabindex="0" alt="sign out of account" onclick="signOut()">Sign Out</button>
+
+            <button id="sign-in-out" tabindex="0" aria-label="Sign Out" onclick="signOut('index/index.html')">Sign
+                Out</button>
+
         </div>
     </header>
 
