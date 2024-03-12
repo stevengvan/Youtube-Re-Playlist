@@ -1,6 +1,6 @@
 var playlists = [];
 var access_token = localStorage.getItem("accessToken");
-if (access_token.length == 0) {
+if (!access_token) {
   var queryStrings = window.location.hash
     .substring(1)
     .split("&")
@@ -13,6 +13,10 @@ if (access_token.length == 0) {
     }, {});
   access_token = queryStrings["access_token"];
   localStorage.setItem("accessToken", access_token);
+  expiration = new Date(
+    new Date().getTime() + Number(queryStrings["expires_in"]) * 1000
+  );
+  localStorage.setItem("expiresIn", expiration);
 }
 
 const fetchPlaylists = async () => {

@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "dev": "netlify dev"
+  },
   "dependencies": {
     "-": "^0.0.1",
     "axios": "^1.5.0",

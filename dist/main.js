@@ -48,13 +48,21 @@ function createSignInOutBtn() {
       return obj;
     }, {});
 
+  if (queryStrings["expires_in"]) {
+    const currentTimestamp = new Date();
+    const milliseconds = Number(queryStrings["expires_in"]);
+    const expiration = new Date(currentTimestamp.getTime() + milliseconds);
+    localStorage.setItem("expiresIn", JSON.stringify(expiration));
+  }
   if (queryStrings["access_token"]) {
     localStorage.setItem("accessToken", queryStrings["access_token"]);
   }
 
   var access_token = localStorage.getItem("accessToken");
+  var currentTime = new Date();
+  var expiration = new Date(localStorage.getItem("expiresIn"));
   var signInOutBtn = document.getElementById("sign-in-out");
-  if (access_token !== null && access_token.length > 0) {
+  if (access_token && currentTime < expiration) {
     signInOutBtn.textContent = "Sign Out";
     signInOutBtn.ariaLabel = "sign out of account";
     signInOutBtn.onclick = function () {
@@ -85,7 +93,8 @@ function signOut(redirect) {
   // Add form to page and submit it to actually revoke the token.
   document.body.appendChild(form);
   form.submit();
-  localStorage.setItem("accessToken", "");
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("expiresIn");
 
   location.href = redirect;
 }

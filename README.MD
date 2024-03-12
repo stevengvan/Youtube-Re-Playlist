@@ -35,5 +35,5 @@ netlify login
 Once the setup is complete and have successfully logged into Netlify with the CLI tool, run the following command to start a local server:
 
 ```
-netlify dev
+npm run dev
 ```
