@@ -48,19 +48,17 @@ function createSignInOutBtn() {
       return obj;
     }, {});
 
-  if (queryStrings["expires_in"]) {
-    const currentTimestamp = new Date();
-    const milliseconds = Number(queryStrings["expires_in"]);
-    const expiration = new Date(currentTimestamp.getTime() + milliseconds);
-    localStorage.setItem("expiresIn", JSON.stringify(expiration));
-  }
+  var currentTime = new Date();
   if (queryStrings["access_token"]) {
     localStorage.setItem("accessToken", queryStrings["access_token"]);
+    const milliseconds = Number(queryStrings["expires_in"]) * 1000;
+    const expiration = new Date(currentTime.getTime() + milliseconds);
+    localStorage.setItem("expiresIn", JSON.stringify(expiration));
   }
 
   var access_token = localStorage.getItem("accessToken");
-  var currentTime = new Date();
-  var expiration = new Date(localStorage.getItem("expiresIn"));
+  var expirationString = localStorage.getItem("expiresIn");
+  var expiration = new Date(JSON.parse(expirationString));
   var signInOutBtn = document.getElementById("sign-in-out");
   if (access_token && currentTime < expiration) {
     signInOutBtn.textContent = "Sign Out";
@@ -68,6 +66,8 @@ function createSignInOutBtn() {
     signInOutBtn.onclick = function () {
       signOut(window.location.pathname);
     };
+  } else {
+    console.log("missed");
   }
 }
 

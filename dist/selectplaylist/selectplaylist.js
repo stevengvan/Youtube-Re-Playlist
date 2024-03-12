@@ -13,9 +13,8 @@ if (!access_token) {
     }, {});
   access_token = queryStrings["access_token"];
   localStorage.setItem("accessToken", access_token);
-  expiration = new Date(
-    new Date().getTime() + Number(queryStrings["expires_in"]) * 1000
-  );
+  const milliseconds = Number(queryStrings["expires_in"]) * 1000;
+  expiration = new Date(new Date().getTime() + milliseconds);
   localStorage.setItem("expiresIn", expiration);
 }
 
