@@ -67,8 +67,8 @@ function createSignInOutBtn() {
       signOut(window.location.pathname);
     };
   } else {
-    signInOutBtn.textContent = "Sign Out";
-    signInOutBtn.ariaLabel = "sign out of account";
+    signInOutBtn.textContent = "Sign In";
+    signInOutBtn.ariaLabel = "sign into an account";
     signInOutBtn.onclick = function () {
       oauthSignIn("index/index.html");
     };
