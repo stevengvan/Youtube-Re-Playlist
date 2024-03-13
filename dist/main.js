@@ -67,7 +67,13 @@ function createSignInOutBtn() {
       signOut(window.location.pathname);
     };
   } else {
-    console.log("missed");
+    signInOutBtn.textContent = "Sign Out";
+    signInOutBtn.ariaLabel = "sign out of account";
+    signInOutBtn.onclick = function () {
+      oauthSignIn("index/index.html");
+    };
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("expiresIn");
   }
 }
 
