@@ -1,3 +1,5 @@
+const PORT = "8888";
+
 /*
  * Create form to request access token from Google's OAuth 2.0 server.
  */
@@ -10,11 +12,15 @@ function oauthSignIn(path) {
   form.setAttribute("method", "GET"); // Send as a GET request.
   form.setAttribute("action", oauth2Endpoint);
 
+  const URI = window.location.href.includes("localhost")
+    ? `http://localhost:${PORT}/`
+    : "https://yt-re-playlist.netlify.app/";
+
   // Parameters to pass to OAuth 2.0 endpoint.
   var params = {
     client_id:
       "445368748159-a5duqn5mbv6m4mm6acpop8tu9f2kd9bi.apps.googleusercontent.com", // Make sure to restrict authorization via adding Javascript origins and redirect URIs
-    redirect_uri: "https://yt-re-playlist.netlify.app/" + path,
+    redirect_uri: URI + path,
     response_type: "token",
     scope: "https://www.googleapis.com/auth/youtube.readonly",
     include_granted_scopes: "true",
@@ -48,7 +54,7 @@ function createSignInOutBtn() {
       return obj;
     }, {});
 
-  var currentTime = new Date();
+  const currentTime = new Date();
   if (queryStrings["access_token"]) {
     localStorage.setItem("accessToken", queryStrings["access_token"]);
     const milliseconds = Number(queryStrings["expires_in"]) * 1000;
@@ -56,10 +62,10 @@ function createSignInOutBtn() {
     localStorage.setItem("expiresIn", JSON.stringify(expiration));
   }
 
-  var access_token = localStorage.getItem("accessToken");
-  var expirationString = localStorage.getItem("expiresIn");
-  var expiration = new Date(JSON.parse(expirationString));
-  var signInOutBtn = document.getElementById("sign-in-out");
+  const access_token = localStorage.getItem("accessToken");
+  const expiration = new Date(JSON.parse(localStorage.getItem("expiresIn")));
+  const signInOutBtn = document.getElementById("sign-in-out");
+
   if (access_token && currentTime < expiration) {
     signInOutBtn.textContent = "Sign Out";
     signInOutBtn.ariaLabel = "sign out of account";
@@ -67,11 +73,6 @@ function createSignInOutBtn() {
       signOut(window.location.pathname);
     };
   } else {
-    signInOutBtn.textContent = "Sign In";
-    signInOutBtn.ariaLabel = "sign into an account";
-    signInOutBtn.onclick = function () {
-      oauthSignIn("index/index.html");
-    };
     localStorage.removeItem("accessToken");
     localStorage.removeItem("expiresIn");
   }
@@ -155,16 +156,16 @@ function gotoMenu() {
 }
 
 function goBack() {
-  var access_token = localStorage.getItem("accessToken");
-  if (access_token && access_token.length > 0) {
-    if (window.location.href.includes("selectplaylist")) {
+  const access_token = localStorage.getItem("accessToken");
+  const unformatted = JSON.parse(localStorage.getItem("expiresIn"));
+  const expiration = new Date(unformatted);
+  const currentTime = new Date();
+
+  if (access_token && currentTime < expiration) {
+    if (window.location.href.includes("selectplaylist"))
       location.href = "index/index.html";
-    } else {
-      history.back();
-    }
-  } else {
-    location.href = "index/index.html";
-  }
+    else history.back();
+  } else location.href = "index/index.html";
 }
 
 var newPlaylist = "";

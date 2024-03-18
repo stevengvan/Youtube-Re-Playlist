@@ -14,8 +14,8 @@ if (!access_token) {
   access_token = queryStrings["access_token"];
   localStorage.setItem("accessToken", access_token);
   const milliseconds = Number(queryStrings["expires_in"]) * 1000;
-  expiration = new Date(new Date().getTime() + milliseconds);
-  localStorage.setItem("expiresIn", expiration);
+  const expiration = new Date(new Date().getTime() + milliseconds);
+  localStorage.setItem("expiresIn", JSON.stringify(expiration));
 }
 
 const fetchPlaylists = async () => {
