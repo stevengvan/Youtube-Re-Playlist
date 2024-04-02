@@ -38,6 +38,11 @@
   animation: text-scroll 15s linear infinite;
 }
 
+.toggle-btn-on {
+  background-color: #82d103 !important;
+  color: black;
+}
+
 @-moz-keyframes text-scroll {
   from {
     -moz-transform: translateX(100%);

@@ -6,6 +6,7 @@ var currentVideo = "";
 var draggables = null;
 var oldSpot = null;
 var onMobile = isMobile();
+var looping = false;
 
 function isMobile() {
   const regex =
@@ -155,11 +156,15 @@ function changeVideo(videoId) {
 
 // Queue to next video
 function queueVideo() {
+  var nextSong;
+  console.log(videosOrder);
   // goto next video queued in playlist
-  if (currentIndex + 1 < total) {
-    const nextSong = videosList[videosOrder[currentIndex + 1]];
-    changeVideo(nextSong.id, currentIndex + 1);
-  }
+  if (currentIndex + 1 < total)
+    nextSong = videosList[videosOrder[currentIndex + 1]];
+  // loop back to first song if looping is on
+  else if (looping) nextSong = videosList[videosOrder[0]];
+
+  changeVideo(nextSong.id);
   return;
 }
 
@@ -244,6 +249,20 @@ function revertPlaylist() {
   changeVideo(videosList[videosOrder[0]].id);
   document.getElementById("list").scroll(0, 0);
   document.getElementById("revert-list").blur();
+}
+
+// Toggles playlist looping
+function toggleLoop() {
+  looping = !looping;
+
+  const toggleBtn = document.getElementById("toggle-loop");
+  if (looping) {
+    toggleBtn.classList.add("toggle-btn-on");
+    toggleBtn.textContent = "Now Looping";
+  } else {
+    toggleBtn.classList.remove("toggle-btn-on");
+    toggleBtn.textContent = "Not Looping";
+  }
 }
 
 ///////////////////////////////////////
