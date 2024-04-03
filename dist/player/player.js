@@ -1,8 +1,8 @@
 var total = localStorage.getItem("total");
-var currentIndex = -1;
-var videosList = JSON.parse(localStorage.getItem("videosList"));
-var videosOrder = Array.from({ length: total }, (_, i) => i);
-var currentVideo = "";
+var currentIndex = 0;
+var videosList = JSON.parse(localStorage.getItem("videosList")); // array of Youtube videos
+var playlistOrder = Array.from({ length: total }, (_, i) => i); // array of video indices from videosList
+var currentVideo = 0;
 var draggables = null;
 var oldSpot = null;
 var onMobile = isMobile();
@@ -14,12 +14,11 @@ function isMobile() {
   return regex.test(navigator.userAgent);
 }
 
-displayList();
-
 // Create Youtube player
 var player;
 function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
+    videoId: videosList[0].id,
     playerVars: {
       autoplay: 1,
     },
@@ -29,6 +28,7 @@ function onYouTubeIframeAPIReady() {
       onError: onErrorState,
     },
   });
+  displayList();
 }
 
 // Autoplay video
@@ -40,13 +40,19 @@ function onPlayerReady(event) {
 // When video ends
 function onPlayerStateChange(event) {
   if (event.data == 0) {
-    queueVideo();
+    // goto next video queued in playlist
+    if (currentIndex + 1 < total) changeVideo(playlistOrder[currentIndex + 1]);
+    // loop back to first song if looping is on
+    else if (looping) changeVideo(playlistOrder[0]);
   }
 }
 
 // When video is unavailable
 function onErrorState(event) {
-  queueVideo();
+  // goto next video queued in playlist
+  if (currentIndex + 1 < total) changeVideo(playlistOrder[currentIndex + 1]);
+  // loop back to first song if looping is on
+  else if (looping) changeVideo(playlistOrder[0]);
 }
 
 // Creates playlist display based on playlist order
@@ -56,7 +62,7 @@ function displayList() {
   list.innerHTML = "";
 
   // add each video from playlist into playlist display as playlist items
-  for (let index = 0; index < videosOrder.length; ++index) {
+  for (let index = 0; index < playlistOrder.length; ++index) {
     // create new playlist item
     let listItem = document.createElement("button");
     listItem.classList.add("listItem");
@@ -69,16 +75,16 @@ function displayList() {
     }
 
     // grab Youtube video ID
-    let video = videosList[videosOrder[index]];
-    listItem.id = video.id;
+    let video = videosList[playlistOrder[index]];
+    listItem.id = playlistOrder[index];
 
     // add clickable and keyboard interactive elements to change videos from display
     listItem.onclick = function () {
-      changeVideo(video.id);
+      changeVideo(playlistOrder[index]);
     };
     listItem.onkeydown = function (event) {
       if (event.key === "Enter") {
-        changeVideo(video.id);
+        changeVideo(playlistOrder[index]);
       }
     };
 
@@ -117,55 +123,43 @@ function displayList() {
     // add playlist item to playlist display
     list.appendChild(listItem);
   }
+
+  document.getElementById(playlistOrder[0]).classList.add("selectedListItem");
+  document.getElementById("video-title").textContent =
+    videosList[playlistOrder[0]].title;
 }
 
 // Changes title of video being played
 function changeTitle() {
   const title = document.getElementById("video-title");
-  title.innerHTML = videosList[videosOrder[currentIndex]].title;
+  title.innerHTML = videosList[playlistOrder[currentIndex]].title;
 }
 
 // Play new video based on where the video in playlist is
-function changeVideo(videoId) {
-  if (currentVideo == videoId) {
+function changeVideo(newVideo) {
+  if (currentVideo == newVideo) {
     return;
   }
 
   // unselect video on playlist if being viewed
-  if (currentVideo) {
-    const oldVideo = document.getElementById(currentVideo);
-    oldVideo.classList.remove("selectedListItem");
-  }
+  const oldVideo = document.getElementById(currentVideo);
+  oldVideo.classList.remove("selectedListItem");
 
   // select new video on playlist
-  const listItem = document.getElementById(videoId);
+  const listItem = document.getElementById(newVideo);
   listItem.classList.add("selectedListItem");
-  currentVideo = videoId;
+  currentVideo = newVideo;
 
-  // currentIndex = index;
-  for (var i = 0; i < videosOrder.length; ++i) {
-    if (videosList[videosOrder[i]].id == videoId) {
+  // update where the player is in playlistOrder
+  for (var i = 0; i < playlistOrder.length; ++i) {
+    if (playlistOrder[i] === newVideo) {
       currentIndex = i;
       break;
     }
   }
 
   changeTitle();
-  player.loadVideoById(currentVideo);
-}
-
-// Queue to next video
-function queueVideo() {
-  var nextSong;
-  console.log(videosOrder);
-  // goto next video queued in playlist
-  if (currentIndex + 1 < total)
-    nextSong = videosList[videosOrder[currentIndex + 1]];
-  // loop back to first song if looping is on
-  else if (looping) nextSong = videosList[videosOrder[0]];
-
-  changeVideo(nextSong.id);
-  return;
+  player.loadVideoById(videosList[currentVideo].id);
 }
 
 // Play video before or after currently playing video
@@ -173,17 +167,14 @@ function gotoPrevNext(option) {
   // Either viewing first video of playlist or not watching anything
   if (
     (currentIndex === 0 && option === "previous") ||
-    (currentIndex === total - 1 && option === "next") ||
-    currentVideo === ""
+    (currentIndex === total - 1 && option === "next")
   ) {
     return;
   }
 
   // unselect currently playing video on playlist
-  if (currentVideo) {
-    const oldVideo = document.getElementById(currentVideo);
-    oldVideo.classList.remove("selectedListItem");
-  }
+  const oldVideo = document.getElementById(currentVideo);
+  oldVideo.classList.remove("selectedListItem");
 
   switch (option) {
     case "previous":
@@ -195,7 +186,8 @@ function gotoPrevNext(option) {
       currentIndex += 1;
       break;
   }
-  currentVideo = videosList[videosOrder[currentIndex]].id;
+
+  currentVideo = playlistOrder[currentIndex];
 
   // scroll to new video on playlist
   const list = document.getElementById("list");
@@ -207,7 +199,7 @@ function gotoPrevNext(option) {
   const listItem = document.getElementById(currentVideo);
   listItem.classList.add("selectedListItem");
   changeTitle();
-  player.loadVideoById(currentVideo);
+  player.loadVideoById(videosList[currentVideo].id);
 }
 
 // Goto currently playing video
@@ -224,29 +216,29 @@ function shufflePlaylist() {
   var newList = [];
 
   // start randomizing duplicated playlist order
-  while (videosOrder.length > 0) {
-    let videoIndex = Math.floor(Math.random() * videosOrder.length);
-    let video = videosOrder.splice(videoIndex, 1)[0];
+  while (playlistOrder.length > 0) {
+    let videoIndex = Math.floor(Math.random() * playlistOrder.length);
+    let video = playlistOrder.splice(videoIndex, 1)[0];
     newList.push(video);
   }
 
   // save and update playlist display
-  videosOrder = newList;
+  playlistOrder = newList;
   currentIndex = -1;
   displayList();
 
   // queue the first video of new playlist order
-  changeVideo(videosList[videosOrder[0]].id, 0);
+  changeVideo(playlistOrder[0]);
   document.getElementById("list").scroll(0, 0);
   document.getElementById("shuffle-list").blur();
 }
 
 // Switches to original playlist order
 function revertPlaylist() {
-  videosOrder = Array.from({ length: total }, (_, i) => i);
+  playlistOrder = Array.from({ length: total }, (_, i) => i);
   currentIndex = 0;
   displayList();
-  changeVideo(videosList[videosOrder[0]].id);
+  changeVideo(playlistOrder[0]);
   document.getElementById("list").scroll(0, 0);
   document.getElementById("revert-list").blur();
 }
@@ -287,8 +279,8 @@ function addDrag(listItem, oldSpot) {
         currentIndex = newSpot;
       }
 
-      var element = videosOrder.splice(oldSpot, 1);
-      videosOrder.splice(newSpot, 0, element[0]);
+      var element = playlistOrder.splice(oldSpot, 1);
+      playlistOrder.splice(newSpot, 0, element[0]);
       oldSpot = null;
     });
   }
@@ -310,8 +302,8 @@ function addDrag(listItem, oldSpot) {
       if (oldSpot === currentIndex) {
         currentIndex = newSpot;
       }
-      var element = videosOrder.splice(oldSpot, 1);
-      videosOrder.splice(newSpot, 0, element[0]);
+      var element = playlistOrder.splice(oldSpot, 1);
+      playlistOrder.splice(newSpot, 0, element[0]);
       oldSpot = null;
     });
   }
