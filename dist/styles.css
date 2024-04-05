@@ -63,7 +63,9 @@ button:active {
 
 #header-right {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+  width: 250px;
 }
 #header-right:first-child {
   position: absolute;
@@ -82,7 +84,7 @@ button:active {
   filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(324deg) brightness(96%)
     contrast(104%);
 }
-#icon {
+.icon {
   height: 30px;
   filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(324deg) brightness(96%)
     contrast(104%);
@@ -106,7 +108,11 @@ body.dark-mode {
 .dark-mode label {
   color: white;
 }
-button.dark-mode > #icon {
+button.dark-mode > .icon {
+  filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(207deg)
+    brightness(102%) contrast(101%);
+}
+img.dark-mode {
   filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(207deg)
     brightness(102%) contrast(101%);
 }

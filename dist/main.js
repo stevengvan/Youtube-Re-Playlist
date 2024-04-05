@@ -1,4 +1,17 @@
 const PORT = "8888";
+var wakeLock = null;
+
+// create an async function to request a wake lock
+async function initWakeLock() {
+  try {
+    wakeLock = await navigator.wakeLock.request("screen");
+    document.getElementById("wake-lock").src = "../icons/wakelock-on.svg";
+  } catch (err) {
+    // The Wake Lock request has failed - usually system related, such as battery.
+    document.getElementById("wake-lock").src = "../icons/wakelock-off.svg";
+  }
+}
+initWakeLock();
 
 /*
  * Create form to request access token from Google's OAuth 2.0 server.
@@ -116,6 +129,9 @@ function toggleDarkMode() {
     document.getElementById("toggle-dark").classList.add("dark-mode");
     document.getElementById("toggle-dark").blur();
     document.body.classList.add("dark-mode");
+    if (document.getElementById("wake-lock")) {
+      document.getElementById("wake-lock").classList.add("dark-mode");
+    }
   } else {
     localStorage.setItem("isDarkMode", "false");
     document.getElementById("toggle-dark").blur();
