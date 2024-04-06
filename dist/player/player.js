@@ -165,9 +165,7 @@ function changeVideo(newVideo) {
 // Play video before or after currently playing video
 function gotoPrevNext(option) {
   // Either viewing first video of playlist or not watching anything
-  if (currentIndex === total - 1 && option === "next" && looping) {
-    currentIndex = -1;
-  } else if (
+  if (
     (currentIndex === 0 && option === "previous") ||
     (currentIndex === total - 1 && option === "next")
   ) {
