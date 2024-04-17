@@ -150,11 +150,6 @@ function toggleLoading(toggle) {
   }
 }
 
-// Goes back to home page
-function gotoMenu() {
-  location.href = "index/index.html";
-}
-
 function goBack() {
   const access_token = localStorage.getItem("accessToken");
   const unformatted = JSON.parse(localStorage.getItem("expiresIn"));

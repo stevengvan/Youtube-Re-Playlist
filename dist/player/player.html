@@ -7,6 +7,8 @@
     <title>YT Re:Playlist</title>
     <script type="text/javascript" async defer src="../main.js"></script>
     <script type="text/javascript" async defer src="player.js"></script>
+    <script type="text/javascript" async defer src="controls.js"></script>
+    <script type="text/javascript" src="playlist.js"></script>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="player.css">
     <link rel='manifest' href='../manifest.json'>
@@ -104,13 +106,13 @@
             </div>
 
             <div id="playlist-controller">
-                <button id="prev-video" onclick="gotoPrevNext('previous')">Previous</button>
-                <button id="goto-playing" onclick="gotoCurrentVideo()">Playing</button>
-                <button id="next-video" onclick="gotoPrevNext('next')">Next</button>
-                <button id="shuffle-list" onclick="shufflePlaylist()">Shuffle</button>
-                <button id="revert-list" onclick="revertPlaylist()">Revert</button>
-                <button id="toggle-loop" onclick="toggleLoop()">Not Looping</button>
-                <button id="goto-menu" onclick="gotoMenu()">Menu</button>
+                <button id="prev-video" onclick="btnPrevNext('previous')">Previous</button>
+                <button id="goto-playing" onclick="btnPlaying()">Playing</button>
+                <button id="next-video" onclick="btnPrevNext('next')">Next</button>
+                <button id="shuffle-list" onclick="btnShuffle()">Shuffle</button>
+                <button id="revert-list" onclick="btnRevert()">Revert</button>
+                <button id="toggle-loop" onclick="btnLoop()">Not Looping</button>
+                <button id="goto-menu" onclick="btnMenu()">Menu</button>
             </div>
 
         </section>
