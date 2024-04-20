@@ -30,6 +30,14 @@ When a Netlify account is created as well Netlify CLI installed, login into your
 netlify login
 ```
 
+Once logged in, add your Google API key using netlify CLI with
+
+```
+netlify env:set KEY someValue
+```
+
+Where `KEY` is the name of the environment variable and `someValue` is the API key. This will allow fetching for Youtube playlists and the videos in it. Further configuration for environment variables can be found here: [Manage environment variables](https://docs.netlify.com/cli/get-started/#manage-environment-variables)
+
 ## Running locally
 
 Once the setup is complete and have successfully logged into Netlify with the CLI tool, run the following command to start a local server:

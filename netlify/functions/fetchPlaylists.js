@@ -1,12 +1,11 @@
 const apiPlaylists = "https://youtube.googleapis.com/youtube/v3/playlists?";
-const axios = require("axios");
 
 exports.handler = async function (event, context) {
   let playlists = [];
   let access_token = event.queryStringParameters.access_token;
 
   try {
-    const response = await axios.get(
+    const response = await fetch(
       apiPlaylists +
         new URLSearchParams({
           part: "status,snippet",
@@ -14,9 +13,16 @@ exports.handler = async function (event, context) {
           key: process.env.KEY,
           mine: "true",
           maxResults: 25,
-        })
+        }),
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      }
     );
-    const data = response.data;
+    const data = await response.json();
 
     Object.keys(data["items"]).forEach((index) => {
       let currentPlaylist = data["items"][index];

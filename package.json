@@ -2,12 +2,7 @@
   "scripts": {
     "dev": "netlify dev"
   },
-  "dependencies": {
-    "-": "^0.0.1",
-    "axios": "^1.5.0",
-    "g": "^2.0.1",
-    "netlify-cli": "^17.13.2",
-    "node-fetch": "^3.3.2",
-    "qs": "^6.11.2"
+  "devDependencies": {
+    "netlify-cli": "^17.22.1"
   }
 }

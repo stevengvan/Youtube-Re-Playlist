@@ -1,5 +1,4 @@
 const apiPlaylistItems = "https://www.googleapis.com/youtube/v3/playlistItems?";
-const axios = require("axios");
 
 exports.handler = async function (event, context) {
   let prevNext = "";
@@ -10,17 +9,24 @@ exports.handler = async function (event, context) {
   // goes through paginations, as Youtube paginates number of videos that can be retrieved per request
   while (!next || next !== prevNext) {
     try {
-      const response = await axios.get(
+      const response = await fetch(
         apiPlaylistItems +
           new URLSearchParams({
             part: "contentDetails,snippet",
+            key: process.env.KEY,
             playlistId: newPlaylist,
             maxResults: 50,
-            key: process.env.KEY,
             ...(next && { pageToken: next }),
-          })
+          }),
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        }
       );
-      const data = response.data;
+      const data = await response.json();
 
       // save tokens to go to next pagination
       prevNext = next;
