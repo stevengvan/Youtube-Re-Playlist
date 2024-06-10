@@ -1,6 +1,13 @@
 var total = JSON.parse(localStorage.getItem("total")); // total number of videos in playlist
 var videosList = JSON.parse(localStorage.getItem("videosList")); // array of Youtube videos
 
+document.onvisibilitychange = () => {
+  if (document.visibilityState === "hidden") {
+    localStorage.removeItem("looping");
+    localStorage.removeItem("playing");
+  }
+};
+
 // Play video before or after currently playing video
 function btnPrevNext(option) {
   let playlistOrder = JSON.parse(localStorage.getItem("playlistOrder"));
@@ -51,14 +58,32 @@ function btnPrevNext(option) {
 }
 
 // Jumps playlist scroll to currently playing video
-function btnPlaying() {
-  let currentVideo = JSON.parse(localStorage.getItem("currentVideo"));
-
-  const list = document.getElementById("list");
-  if (list.scrollHeight > list.clientHeight) {
-    document.getElementById(currentVideo).scrollIntoView();
+function btnPlaying(set_toggle = false) {
+  if (set_toggle === true) {
+    // store new toggle setting in local storage
+    if (localStorage.getItem("playing") === null) {
+      localStorage.setItem("playing", "true");
+      document.getElementById("toggle-playing").classList.add("toggle-btn-on");
+    }
+    // toggle currently playing setting
+    else {
+      let toggle = JSON.parse(localStorage.getItem("playing"));
+      localStorage.setItem("playing", JSON.stringify(!toggle));
+    }
   }
-  list.blur();
+
+  // add visual for toggle changes
+  let toggle = JSON.parse(localStorage.getItem("playing"));
+  if (toggle) {
+    document.getElementById("toggle-playing").classList.add("toggle-btn-on");
+    let currentVideo = JSON.parse(localStorage.getItem("currentVideo"));
+    const list = document.getElementById("list");
+    if (list.scrollHeight > list.clientHeight) {
+      document.getElementById(currentVideo).scrollIntoView();
+    }
+    list.blur();
+  } else
+    document.getElementById("toggle-playing").classList.remove("toggle-btn-on");
 }
 
 // Randomizes order of playlist

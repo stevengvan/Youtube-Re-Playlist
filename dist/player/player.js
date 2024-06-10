@@ -37,12 +37,15 @@ function onPlayerStateChange(event) {
   let playlistOrder = JSON.parse(localStorage.getItem("playlistOrder"));
   let currentIndex = JSON.parse(localStorage.getItem("currentIndex"));
   let looping = JSON.parse(localStorage.getItem("looping"));
+  let currentlyPlaying = JSON.parse(localStorage.getItem("playing"));
 
   if (event.data == 0) {
     // goto next video queued in playlist
     if (currentIndex + 1 < total) changeVideo(playlistOrder[currentIndex + 1]);
     // loop back to first video if looping is on
     else if (looping) changeVideo(playlistOrder[0]);
+    // jump video list to currently playing video
+    if (currentlyPlaying) btnPlaying();
   }
 }
 
@@ -56,6 +59,8 @@ function onErrorState(event) {
   if (currentIndex + 1 < total) changeVideo(playlistOrder[currentIndex + 1]);
   // loop back to first video if looping is on
   else if (looping) changeVideo(playlistOrder[0]);
+  // jump video list to currently playing video
+  if (currentlyPlaying) btnPlaying();
 }
 
 // Changes title of video being played
