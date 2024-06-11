@@ -1,5 +1,6 @@
 var total = JSON.parse(localStorage.getItem("total")); // total number of videos in playlist
 var videosList = JSON.parse(localStorage.getItem("videosList")); // array of Youtube videos
+var wakeLock = null;
 localStorage.setItem("currentIndex", 0);
 localStorage.setItem("currentVideo", 0);
 localStorage.setItem("looping", String(false));
@@ -7,6 +8,20 @@ localStorage.setItem(
   "playlistOrder",
   JSON.stringify(Array.from({ length: total }, (_, i) => i))
 ); // array of video indices from videosList
+
+async function activateWakeLock() {
+  try {
+    wakeLock = await navigator.wakeLock.request("screen");
+  } catch (err) {
+    // the wake lock request fails - usually system related, such being low on battery
+    console.log(`${err.name}, ${err.message}`);
+  }
+}
+activateWakeLock();
+
+document.onvisibilitychange = () => {
+  if (wakeLock !== null) wakeLock.release();
+};
 
 // Create Youtube player
 var player;
