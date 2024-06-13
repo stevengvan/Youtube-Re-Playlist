@@ -125,13 +125,8 @@ function btnLoop() {
   let looping = JSON.parse(localStorage.getItem("looping"));
 
   const toggleBtn = document.getElementById("toggle-loop");
-  if (!looping) {
-    toggleBtn.classList.add("toggle-btn-on");
-    toggleBtn.textContent = "Now Looping";
-  } else {
-    toggleBtn.classList.remove("toggle-btn-on");
-    toggleBtn.textContent = "Not Looping";
-  }
+  if (!looping) toggleBtn.classList.add("toggle-btn-on");
+  else toggleBtn.classList.remove("toggle-btn-on");
   looping = !looping;
   localStorage.setItem("looping", String(looping));
 }
