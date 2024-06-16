@@ -15,6 +15,55 @@
   width: 100%;
 }
 
+#search-history {
+  margin-top: 2.5rem;
+  color: black;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#search-history > *:first-child {
+  display: inherit;
+  width: 100%;
+}
+#search-history > *:first-child > h3 {
+  display: inherit;
+  justify-content: center;
+  width: 100%;
+}
+
+#clear-search-history {
+  background-color: transparent;
+  color: blue;
+  margin-left: auto;
+  border-radius: 0.25rem;
+  height: auto;
+  font-weight: lighter;
+  padding: 0.25rem;
+  display: inherit;
+}
+#clear-search-history:hover,
+#clear-search-history:focus {
+  background-color: #ed0000;
+  color: white;
+}
+
+#search-list {
+  margin-top: 1rem;
+}
+#search-list > li {
+  font-size: 17px;
+}
+#search-list > li:hover,
+li:focus {
+  background-color: grey;
+  transition-duration: 250ms;
+  cursor: pointer;
+}
+#search-list > li:not(:last-child) {
+  margin-bottom: 0.25rem;
+}
+
 #app-title {
   font-size: 50px;
 }

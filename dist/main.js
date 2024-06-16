@@ -217,6 +217,8 @@ const searchPlaylist = async (event, submit = false, id = "", title = "") => {
     // create playlist display once playlist is retrieved
     fetchVideos().then((statusCode) => {
       if (statusCode == 200) {
+        addToSearchHistory();
+
         document.getElementById("error-message").innerText = "";
         if (id.length === 0) {
           document.getElementById("search-bar").value = "";

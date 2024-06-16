@@ -12,18 +12,18 @@
     <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
 </head>
 
-<body onload="createSignInOutBtn()">
+<body onload="initializePage()">
     <header>
-        <div id="header-right">
+        <nav id="header-right">
             <button id="toggle-dark" tabindex="0" alt="toggle dark mode" onclick="toggleDarkMode()"><img id="icon"
                     alt="dark mode icon" src="../icons/dark-theme-svgrepo-com.svg"></button>
 
             <button id="sign-in-out" tabindex="0" aria-label="sign into an account"
                 onclick="oauthSignIn('index/index.html')">Sign In</button>
-        </div>
+        </nav>
     </header>
 
-    <div id="menu-screen">
+    <section id="menu-screen">
         <h1 id="app-title">Youtube Playlist Player</h1>
 
         <div id="menu-buttons">
@@ -36,8 +36,17 @@
                     minlength="11" maxlength="95" onkeydown="searchPlaylist(event)">
             </label>
             <button id="submit-btn" onclick="searchPlaylist(null, true)">Search</button>
+
+            <div id="search-history">
+                <div>
+                    <h3>Recently Searched</h3>
+                    <button id="clear-search-history" onclick="deleteSearchHistory()">clear</button>
+                </div>
+                <hr>
+                <ul id="search-list"></ul>
+            </div>
         </div>
-    </div>
+    </section>
 </body>
 
 
