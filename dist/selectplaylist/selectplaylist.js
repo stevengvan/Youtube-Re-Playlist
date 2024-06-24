@@ -37,10 +37,10 @@ function displayPlaylists() {
     }
     container.tabIndex = 0;
     container.onclick = function () {
-      searchPlaylist(null, true, String(playlists[i].id), playlists[i].title);
+      searchPlaylist(null, String(playlists[i].id), playlists[i].title);
     };
     container.onkeydown = function (event) {
-      searchPlaylist(event, false, String(playlists[i].id), playlists[i].title);
+      searchPlaylist(event, String(playlists[i].id), playlists[i].title);
     };
     let thumbnail = document.createElement("img");
     thumbnail.src = playlists[i].thumbnail.url;

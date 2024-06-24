@@ -1,6 +1,6 @@
 # Youtube Playlist Rework
 
-This is an app that allows users to stream any playlist they want. It is a Progressive web app project that utilizes Google's Youtube player API and OAuth 2.0 protocol. Features such as sign in/out, dark mode toggle, and additional player controls are included in this application. This project was made to speed up the process of shuffling a playlist on a larger playlist (similarly to how Youtube's mobile app shuffles a playlist).
+This is an app that allows users to stream any playlist they want. It is a web app project that utilizes Google's Youtube player API and OAuth 2.0 protocol. Features such as sign in/out, dark mode toggle, and additional player controls are included in this application. This project was made to speed up the process of shuffling a playlist on a larger playlist (similarly to how Youtube's mobile app shuffles a playlist).
 
 ## Demo
 

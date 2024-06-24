@@ -85,10 +85,10 @@ function displayList() {
     title.innerText = video.title;
 
     // create drag button
-    let dragBtn = document.createElement("div");
+    let dragBtn = document.createElement("button");
     dragBtn.classList = "dragBtn";
     let dragIcon = document.createElement("img");
-    dragIcon.src = "../icons/drag.png";
+    dragIcon.src = "../icons/drag-svgrepo-com.svg";
     dragIcon.alt = `button drag for ${video.title}`;
     dragIcon.classList = "dragIcon";
 

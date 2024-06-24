@@ -106,24 +106,35 @@
 .listItem:not(:last-of-type) {
   margin-bottom: 0.5rem;
 }
-.listItem > .thumbnail {
-  width: 120px;
-  height: auto;
-}
 .listItem > p {
   max-height: 90px;
   overflow: hidden;
 }
-.listItem > .dragBtn {
+
+.thumbnail {
+  width: 120px;
+  height: auto;
+}
+
+.dragBtn {
   margin-left: auto;
   display: flex;
   align-items: center;
   height: 100%;
+  background-color: transparent;
+  border-radius: 0;
 }
-.listItem > .dragBtn > .dragIcon {
-  width: 25px;
+
+.dragIcon {
+  width: 35px;
   height: auto;
 }
+
+.dark-mode .dragIcon {
+  filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(207deg)
+    brightness(102%) contrast(101%);
+}
+
 .isDragging {
   background-color: rgb(0, 132, 255) !important;
 }
@@ -153,21 +164,9 @@
     transition-duration: 250ms;
     cursor: pointer;
   }
-  #go-back:hover {
-    border-bottom-right-radius: 0.5rem;
-  }
 }
 
 @media (min-width: 40rem) or (min-width: 750px) {
-  #go-back {
-    border-bottom-left-radius: 0;
-    height: 35px;
-    width: 35px;
-  }
-  #go-back > span {
-    font-size: 30px;
-  }
-
   #main-content {
     display: flex;
     height: 90%;

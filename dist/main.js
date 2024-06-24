@@ -183,55 +183,57 @@ const fetchVideos = async () => {
 };
 
 // Uses given URL to search for existing playlist
-const searchPlaylist = async (event, submit = false, id = "", title = "") => {
-  if ((event && event.key == "Enter") || submit == true) {
-    if (id.length == 0) {
-      document.getElementById("search-bar").blur();
-    }
+const searchPlaylist = async (event, id = "", title = "", submit = false) => {
+  if (event && event.key !== "Enter") return;
 
-    let input =
-      id.length > 0 ? id : document.getElementById("search-bar").value;
+  if (id.length == 0) document.getElementById("search-bar").blur();
 
-    // check for any invalid inputs
-    if (input.length < 11 && input.length > 0) {
-      document.getElementById("error-message").innerHTML =
-        "Must enter valid URL or playlist ID; check for mispelling.";
-      return;
-    } else if (input.length === 0) {
-      document.getElementById("error-message").innerHTML =
-        "No URL or ID was provided";
-      return;
-    }
+  let input = id.length > 0 ? id : document.getElementById("search-bar").value;
 
-    // grab playlist ID from URL retrieved
-    let startPos = input.search("=") + 1;
-    let endPos = input.search("&");
-    if (endPos > 0) {
-      newPlaylist = input.slice(startPos, endPos);
-    } else {
-      newPlaylist = input.slice(startPos);
-    }
+  // check for any invalid inputs
+  if (input.length < 11 && input.length > 0) {
+    document.getElementById("error-message").innerHTML =
+      "Must enter valid URL or playlist ID; check for mispelling.";
+    return;
+  } else if (input.length === 0) {
+    document.getElementById("error-message").innerHTML =
+      "No URL or ID was provided";
+    return;
+  }
 
-    toggleLoading(1);
+  // grab playlist ID from URL retrieved
+  let startPos = input.search("=") + 1;
+  let endPos = input.search("&");
+  if (endPos > 0) {
+    newPlaylist = input.slice(startPos, endPos);
+  } else {
+    newPlaylist = input.slice(startPos);
+  }
 
-    // create playlist display once playlist is retrieved
-    fetchVideos().then((statusCode) => {
-      if (statusCode == 200) {
+  toggleLoading(1);
+
+  // create playlist display once playlist is retrieved
+  fetchVideos().then((statusCode) => {
+    if (statusCode == 200) {
+      if (submit) {
+        console.log("help");
         addToSearchHistory();
-
-        document.getElementById("error-message").innerText = "";
-        if (id.length === 0) {
-          document.getElementById("search-bar").value = "";
-        }
-        localStorage.setItem("videosList", JSON.stringify(videosList));
-        localStorage.setItem("total", total);
-        window.location.href = "/player/player.html";
-      } else if (statusCode == 404) {
-        document.getElementById("error-message").innerHTML =
-          "Could not find playlist with the given URL/ID: Check if the playlist URL or ID is incorrect or if the playlist is private";
+      } else {
+        console.log("nope");
       }
 
-      toggleLoading(0);
-    });
-  }
+      document.getElementById("error-message").innerText = "";
+      if (id.length === 0) {
+        document.getElementById("search-bar").value = "";
+      }
+      localStorage.setItem("videosList", JSON.stringify(videosList));
+      localStorage.setItem("total", total);
+      window.location.href = "/player/player.html";
+    } else if (statusCode == 404) {
+      document.getElementById("error-message").innerHTML =
+        "Could not find playlist with the given URL/ID: Check if the playlist URL or ID is incorrect or if the playlist is private";
+    }
+
+    toggleLoading(0);
+  });
 };

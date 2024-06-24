@@ -47,6 +47,13 @@
   background-color: #ed0000;
   color: white;
 }
+.dark-mode #clear-search-history {
+  color: orange;
+}
+.dark-mode #clear-search-history:hover,
+#clear-search-history:focus {
+  color: white;
+}
 
 #search-list {
   margin-top: 1rem;

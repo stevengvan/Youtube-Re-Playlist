@@ -38,7 +38,6 @@ button {
   border: none;
   transition: 250ms;
 }
-
 button:focus {
   background-color: #ed0000;
 }
@@ -47,18 +46,16 @@ button:active {
 }
 
 #go-back {
+  font-size: 50px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0.5rem;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 35px;
-}
-#go-back > span {
-  font-size: 50px;
 }
 
 #header-right {
@@ -94,6 +91,9 @@ button:active {
 
 #sign-in-out {
   width: 100%;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 body.dark-mode {
@@ -103,6 +103,7 @@ body.dark-mode {
 .dark-mode h1,
 .dark-mode h2,
 .dark-mode h3,
+.dark-mode li,
 .dark-mode label {
   color: white;
 }
@@ -168,7 +169,6 @@ button.dark-mode > #icon {
 @media only screen and (hover: hover) and (pointer: fine) {
   button:hover {
     background-color: #f69435;
-    transition: 250ms;
     cursor: pointer;
   }
 
@@ -185,14 +185,8 @@ button.dark-mode > #icon {
 
 @media (min-width: 40rem) and (min-width: 750px) {
   #go-back {
-    border-bottom-left-radius: 0;
+    font-size: 30px;
     height: 35px;
     width: 35px;
-  }
-  #go-back > span {
-    font-size: 30px;
-  }
-  #go-back:hover {
-    border-bottom-right-radius: 0.5rem;
   }
 }
