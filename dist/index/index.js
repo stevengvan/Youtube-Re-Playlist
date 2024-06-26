@@ -45,7 +45,11 @@ function addToSearchHistory() {
   let searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
   if (searchHistory === null) searchHistory = [];
   else if (searchHistory.length === 5) searchHistory.pop();
-  searchHistory.unshift(document.getElementById("search-bar").value);
+  const searchedPlaylist = document
+    .getElementById("search-bar")
+    .value.split("=");
+  if (searchedPlaylist.length > 1) searchHistory.unshift(searchedPlaylist[1]);
+  else searchHistory.unshift(searchedPlaylist[0]);
   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 }
 

@@ -21,29 +21,30 @@
             onclick="oauthSignIn('index/index.html')">Sign In</button>
     </nav>
 
-    <section id="menu-screen">
-        <h1 id="app-title">Youtube Playlist Player</h1>
+    <h1 id="app-title">Youtube Playlist Player</h1>
 
-        <div id="menu-buttons">
-            <button onclick="selectPlaylistRedirect()">Select playlist from your account</button>
-            <h2>Or</h2>
-            <p id="error-message"></p>
-            <label>
-                Search:
-                <input id="search-bar" type="text" aria-label="playlist input" placeholder="Enter playlist URL or ID..."
-                    minlength="11" maxlength="95" onkeydown="searchPlaylist(event)">
-            </label>
-            <button id="submit-btn" onclick="searchPlaylist(null, '', '', true)">Search</button>
 
-            <div id="search-history">
-                <div>
-                    <h3>Recently Searched</h3>
-                    <button id="clear-search-history" onclick="deleteSearchHistory()">clear</button>
-                </div>
-                <hr>
-                <ul id="search-list"></ul>
-            </div>
+    <section id="menu-buttons">
+        <button onclick="selectPlaylistRedirect()">Select playlist from your account</button>
+
+        <h2>Or</h2>
+
+        <p id="error-message"></p>
+        <label>
+            Search:
+            <input id="search-bar" type="text" aria-label="playlist input" placeholder="Enter playlist URL or ID..."
+                minlength="11" maxlength="95" onkeydown="searchPlaylist(event)">
+        </label>
+        <button id="submit-btn" onclick="searchPlaylist(null, '', '', true)">Search</button>
+    </section>
+
+    <section id="search-history">
+        <div>
+            <h3>Recently Searched</h3>
+            <button id="clear-search-history" onclick="deleteSearchHistory()">clear</button>
         </div>
+        <hr>
+        <ul id="search-list"></ul>
     </section>
 </body>
 

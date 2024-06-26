@@ -7,12 +7,14 @@
 
 body {
   box-sizing: border-box;
-  height: 100svh;
-  width: 100svw;
+  min-height: 100svh;
+  max-width: 100svw;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-wrap: break-word;
 }
 
 button {
@@ -73,7 +75,6 @@ nav {
 }
 
 #sign-in-out {
-  /* width: 100%; */
   border-top-right-radius: 0;
   border-top-left-radius: 0;
   border-bottom-right-radius: 0;
