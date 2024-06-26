@@ -15,17 +15,18 @@
 </head>
 
 <body onload="createSignInOutBtn()">
-    <header>
+
+    <nav>
         <button id="go-back" aria-label="go back button" onclick="goBack()">&#8592</button>
 
-        <div id="header-right">
+        <div style="display:flex;">
             <button id="toggle-dark" tabindex="0" alt="toggle dark mode" onclick="toggleDarkMode()"><img id="icon"
                     alt="dark mode icon" draggable="false" src="../icons/dark-theme-svgrepo-com.svg"></button>
 
             <button id="sign-in-out" tabindex="0" aria-label="sign into an account"
                 onclick="oauthSignIn('player/player.html')">Sign In</button>
         </div>
-    </header>
+    </nav>
 
     <div id="main-content">
         <section id="video-container">

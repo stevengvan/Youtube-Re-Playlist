@@ -12,19 +12,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-}
-
-header {
-  width: 100%;
-  position: absolute;
-  top: 0;
-  display: flex;
-  justify-content: space-between;
+  overflow: auto;
 }
 
 button {
@@ -45,8 +33,13 @@ button:active {
   background-color: #ed0000;
 }
 
+nav {
+  display: flex;
+  width: 100%;
+}
+
 #go-back {
-  font-size: 50px;
+  font-size: 22.5px !important;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-left-radius: 0;
@@ -55,16 +48,6 @@ button:active {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 35px;
-}
-
-#header-right {
-  display: flex;
-  gap: 0.5rem;
-}
-#header-right:first-child {
-  position: absolute;
-  right: 0;
 }
 
 #toggle-dark {
@@ -90,7 +73,7 @@ button:active {
 }
 
 #sign-in-out {
-  width: 100%;
+  /* width: 100%; */
   border-top-right-radius: 0;
   border-top-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -185,7 +168,6 @@ button.dark-mode > #icon {
 
 @media (min-width: 40rem) and (min-width: 750px) {
   #go-back {
-    font-size: 30px;
     height: 35px;
     width: 35px;
   }

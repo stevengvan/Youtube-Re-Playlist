@@ -1,3 +1,7 @@
+nav {
+  justify-content: space-between;
+}
+
 #playlists-list {
   width: 100%;
   height: 100%;

@@ -1,3 +1,7 @@
+nav {
+  justify-content: space-between;
+}
+
 #main-content {
   box-sizing: border-box;
   width: 100%;
