@@ -1,3 +1,7 @@
+:root {
+  --secondary-color: rgb(0, 132, 255);
+}
+
 nav {
   justify-content: space-between;
 }
@@ -103,9 +107,10 @@ nav {
   height: 90px;
   display: flex;
   align-items: center;
+  transition: transform 0.2s ease;
 }
 .listItem:focus {
-  background-color: grey;
+  background-color: #ed0000;
 }
 .listItem:not(:last-of-type) {
   margin-bottom: 0.5rem;
@@ -128,6 +133,9 @@ nav {
   background-color: transparent;
   border-radius: 0;
 }
+.dragBtn:hover {
+  background-color: transparent !important;
+}
 
 .dragIcon {
   width: 35px;
@@ -140,11 +148,23 @@ nav {
 }
 
 .isDragging {
-  background-color: rgb(0, 132, 255) !important;
+  opacity: 0.8;
+  background: var(--secondary-color) !important;
+  cursor: grabbing;
 }
 
 .selectedListItem {
-  background-color: grey;
+  background-color: #ed0000;
+}
+
+.ghost-item {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important;
+  background: var(--secondary-color);
+  transition: none !important;
+  position: fixed;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 1000;
 }
 
 @media screen and (max-height: 450px) {
@@ -164,7 +184,7 @@ nav {
 
 @media only screen and (hover: hover) and (pointer: fine) {
   .listItem:hover {
-    background-color: lightgrey;
+    background-color: grey;
     transition-duration: 250ms;
     cursor: pointer;
   }

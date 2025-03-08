@@ -110,62 +110,117 @@ function displayList() {
     list.appendChild(listItem);
   }
 
+  // select first video in playlist
   document.getElementById(playlistOrder[0]).classList.add("selectedListItem");
   document.getElementById("video-title").textContent =
     videosList[playlistOrder[0]].title;
 }
 
+// Drag functionality for videos in playlist
 function addDrag(listItem) {
-  // Drag events for mouse pointers
   if (!isMobile()) {
+    // video first being dragged
     listItem.addEventListener("dragstart", () => {
       listItem.classList.add("isDragging");
       draggables = [...document.querySelectorAll(".listItem")];
       oldSpot = draggables.findIndex((element) => element.id === listItem.id);
     });
 
+    // video dragging ended
     listItem.addEventListener("dragend", () => {
       let currentIndex = JSON.parse(localStorage.getItem("currentIndex"));
       listItem.classList.remove("isDragging");
       draggables = [...document.querySelectorAll(".listItem")];
+
+      // find where the video dragged landed
       let newSpot = draggables.findIndex(
         (element) => element.id === listItem.id
       );
 
+      // dragged video is the current video being played
       if (oldSpot === currentIndex) {
         localStorage.setItem("currentIndex", newSpot);
       }
 
+      // set the dragged video to the new location in the playlist
       let playlistOrder = JSON.parse(localStorage.getItem("playlistOrder"));
       var element = playlistOrder.splice(oldSpot, 1);
       playlistOrder.splice(newSpot, 0, element[0]);
       localStorage.setItem("playlistOrder", JSON.stringify(playlistOrder));
       oldSpot = null;
     });
-  }
-  // Touch events for mobile devices //
-  else {
+  } else {
+    let ghostElement = null;
+    let listRect;
+
+    // video is being held by touch
     listItem.childNodes[2].addEventListener("touchstart", (e) => {
+      // prevent long-press popup only on the drag button
+      e.preventDefault();
+
+      listRect = document.getElementById("list").getBoundingClientRect();
+
+      // create ghost element
+      ghostElement = listItem.cloneNode(true);
+      ghostElement.style.width = `${listRect.width}px`;
+      ghostElement.classList.add("ghost-item");
+
+      // position ghost element at initial touch position
+      ghostElement.style.top = `${
+        e.touches[0].clientY - listItem.offsetHeight / 2
+      }px`;
+      ghostElement.style.left = `${listRect.left}px`;
+      document.body.appendChild(ghostElement);
+
+      // make original semi-transparent
       listItem.classList.add("isDragging");
       draggables = [...document.querySelectorAll(".listItem")];
       oldSpot = draggables.findIndex((element) => element.id === listItem.id);
     });
-    listItem.childNodes[2].addEventListener("touchmove", (e) => {
+
+    // prevent context menu on the drag button
+    listItem.childNodes[2].addEventListener("contextmenu", (e) => {
       e.preventDefault();
     });
 
+    // video is being dragged
+    listItem.childNodes[2].addEventListener("touchmove", (e) => {
+      e.preventDefault();
+
+      // track the creatd ghost element to finger
+      if (ghostElement) {
+        ghostElement.style.top = `${
+          e.touches[0].clientY - ghostElement.offsetHeight / 2
+        }px`;
+        ghostElement.style.left = `${listRect.left}px`;
+      }
+    });
+
+    // dragged video is let go
     listItem.childNodes[2].addEventListener("touchend", () => {
-      let currentIndex = JSON.parse(localStorage.getItem("currentIndex"));
+      if (ghostElement) {
+        ghostElement.remove();
+        ghostElement = null;
+      }
+
+      listItem.style.transform = "";
+      listItem.style.zIndex = "";
+      listItem.style.opacity = "1";
       listItem.classList.remove("isDragging");
+
+      // update playlist order
+      let currentIndex = JSON.parse(localStorage.getItem("currentIndex"));
       draggables = [...document.querySelectorAll(".listItem")];
       let newSpot = draggables.findIndex(
         (element) => element.id === listItem.id
       );
 
+      // dragged video is the video currently being played
       if (oldSpot === currentIndex) {
         localStorage.setItem("currentIndex", newSpot);
       }
 
+      // update playlist order
       let playlistOrder = JSON.parse(localStorage.getItem("playlistOrder"));
       var element = playlistOrder.splice(oldSpot, 1);
       playlistOrder.splice(newSpot, 0, element[0]);
@@ -175,29 +230,42 @@ function addDrag(listItem) {
   }
 }
 
+// Initialize dragging functionality within the playlist container (used in player.js)
 function initDragging() {
   const list = document.getElementById("list");
 
   if (onMobile) {
+    // a video is being dragged in playlist
     list.addEventListener("touchmove", (e) => {
-      var location = e.targetTouches[0];
-      if (location.pageX <= screen.width - 33) {
-        return false;
-      }
-      const bottomItem = insertAboveItem(list, location.pageY);
+      const touch = e.touches[0];
       const currItem = document.querySelector(".isDragging");
+      if (!currItem) return;
+
+      const bottomItem = insertAboveItem(list, touch.clientY);
+
+      // makes sure to not move down the playlist any further
       if (!bottomItem) {
         list.appendChild(currItem);
       } else {
         list.insertBefore(currItem, bottomItem);
       }
-      return true;
+
+      // render the video moving
+      requestAnimationFrame(() => {
+        if (currItem.classList.contains("isDragging")) {
+          currItem.style.transform = `translateY(${dragOffset}px)`;
+          currItem.style.zIndex = "1000";
+        }
+      });
     });
   } else {
+    // a video is being dragged in playlist
     list.addEventListener("dragover", (e) => {
       e.preventDefault();
-      const bottomItem = insertAboveItem(list, e.clientY);
       const currItem = document.querySelector(".isDragging");
+      const bottomItem = insertAboveItem(list, e.clientY);
+
+      // makes sure to not move down the playlist any further
       if (!bottomItem) {
         list.appendChild(currItem);
       } else {
@@ -207,13 +275,23 @@ function initDragging() {
   }
 }
 
+// Helper function to render moving a video over another video
 function insertAboveItem(list, mouseY) {
   const others = [...list.querySelectorAll(".listItem:not(.isDragging)")];
 
+  // add transition around video being passed through
+  others.forEach((item) => {
+    if (!item.style.transition) {
+      item.style.transition = "transform 0.2s ease";
+    }
+  });
+
+  // range of how far a dragging video must pass through another to rearrange order
   return others.reduce(
     (closest, child) => {
       const box = child.getBoundingClientRect();
-      const offset = mouseY - box.top - box.height / 2.6;
+      const offset = mouseY - box.top - box.height / 2;
+
       if (offset < 0 && offset > closest.offset) {
         return { offset: offset, element: child };
       } else {

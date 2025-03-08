@@ -25,7 +25,7 @@ nav {
   cursor: pointer;
 }
 .playlist-container:focus {
-  background-color: grey;
+  background-color: #ed0000;
 }
 .playlist-container:not(:last-of-type) {
   margin-bottom: 0.5rem;

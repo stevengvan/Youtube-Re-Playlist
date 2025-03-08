@@ -71,7 +71,7 @@ nav {
 }
 
 #toggle-dark:focus {
-  background-color: lightgrey;
+  background-color: grey;
 }
 
 #sign-in-out {
